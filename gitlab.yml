@@ -1,1 +1,6 @@
-test
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gitlab
+  labels:
+    name: gitlab
