@@ -15,13 +15,11 @@ spec:
   selector:
     matchLabels:
       app: gitlab
-
   template:
     metadata:
       name: gitlab-dep-pod
       labels:
         app: gitlab
-
     spec:
       containers:
       - name: gitlab
@@ -51,3 +49,34 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-pv
+  namespace: gitlab
+  labels:
+    app: gitlab
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  hostPath: /home/data
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: local-pvc
+  namespace: gitlab
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: local-storage
