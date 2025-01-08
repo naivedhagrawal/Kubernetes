@@ -14,8 +14,6 @@ nodes:
   extraMounts:
   - hostPath: /home/root
     containerPath: /run
-  - hostPath: /home/root
-    containerPath: /var
   - hostPath: /home/data/var
     containerPath: /var/opt/gitlab
   - hostPath: /home/data/etc
