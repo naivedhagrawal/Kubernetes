@@ -3,9 +3,6 @@ apiVersion: kind.x-k8s.io/v1alpha4
 
 nodes:
 - role: control-plane
-  extraMounts:
-  - hostPath: /home/root
-    containerPath: /
   extraPortMappings:
   - containerPort: 31000
     hostPort: 80
@@ -15,6 +12,10 @@ nodes:
   image: kindest/node:v1.32.0
 - role: worker
   extraMounts:
+  - hostPath: /home/root
+    containerPath: /run
+  - hostPath: /home/root
+    containerPath: /var
   - hostPath: /home/data/var
     containerPath: /var/opt/gitlab
   - hostPath: /home/data/etc
