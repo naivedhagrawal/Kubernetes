@@ -65,7 +65,8 @@ spec:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   storageClassName: local-storage
-  hostPath: /home/data
+  hostPath:
+    path: /home/data
 
 ---
 kind: PersistentVolumeClaim
