@@ -15,8 +15,10 @@ nodes:
   image: kindest/node:v1.32.0
 - role: worker
   extraMounts:
-  - hostPath: /home/data
+  - hostPath: /home/data/var
     containerPath: /var/opt/gitlab
+  - hostPath: /home/data/etc
+    containerPath: /etc/gitlab
   image: kindest/node:v1.32.0
   #selinuxRelabel: true
 
