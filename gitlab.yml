@@ -62,7 +62,7 @@ spec:
   capacity:
     storage: 10Gi
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   storageClassName: local-storage
   hostPath:
@@ -76,7 +76,7 @@ metadata:
   namespace: gitlab
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 10Gi
