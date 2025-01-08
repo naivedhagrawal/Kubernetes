@@ -58,13 +58,14 @@ metadata:
   namespace: gitlab
   labels:
     app: gitlab
+    name: gitlab
 spec:
   capacity:
     storage: 10Gi
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: local-storage
+  storageClassName: standard
   hostPath:
     path: /home/data
 
@@ -80,4 +81,6 @@ spec:
   resources:
     requests:
       storage: 10Gi
-  storageClassName: local-storage
+  selector:
+    matchLabels:
+      name: gitlab
