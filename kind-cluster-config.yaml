@@ -8,14 +8,14 @@ nodes:
     hostPort: 80
     listenAddress: "0.0.0.0" # Optional, defaults to "0.0.0.0"
     protocol: tcp # Optional, defaults to tcp
-    selinuxRelabel: true
+    #selinuxRelabel: true
   image: kindest/node:v1.32.0
 - role: worker
   extraMounts:
   - hostPath: /home/data
     containerPath: /var/opt/gitlab
   image: kindest/node:v1.32.0
-  selinuxRelabel: true
+  #selinuxRelabel: true
 
   # kind create cluster --config kind-cluster-config.yaml --name kind-cluster
   # kubectl config set-context --current --namespace=<namespace>
