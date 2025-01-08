@@ -26,9 +26,13 @@ spec:
         image: gitlab/gitlab-ce:latest
         ports:
         - containerPort: 80
-      volumeMounts:
+        volumeMounts:
           - mountPath: /var/opt/gitlab
-            name: local-pvc
+            name: data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: local-pvc
 ---
 
 kind: Service
