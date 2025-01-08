@@ -3,6 +3,10 @@ apiVersion: kind.x-k8s.io/v1alpha4
 
 nodes:
 - role: control-plane
-  image: kindest/node:v1.32.0
-- role: control-plane
-  image: kindest/node:v1.32.0
+  image: kindest/node:latest
+- role: worker
+  image: kindest/node:latest
+- role: worker
+  image: kindest/node:latest
+
+  # kind create cluster --config kind-cluster-config.yaml --name kind-cluster
