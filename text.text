@@ -1,0 +1,35 @@
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-pv
+  namespace: gitlab
+  labels:
+    app: gitlab
+    name: gitlab
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  hostPath:
+    path: /home/data
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: local-pvc
+  namespace: gitlab
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: local-storage
+  resources:
+    requests:
+      storage: 10Gi
+  selector:
+    matchLabels:
+      name: gitlab
