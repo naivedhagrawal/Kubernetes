@@ -63,7 +63,7 @@ spec:
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: local-storage
+  storageClassName: local-path
   hostPath:
     path: /home/data
 
@@ -76,7 +76,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteMany
-  storageClassName: local-storage
+  storageClassName: local-path
   resources:
     requests:
       storage: 50Gi
