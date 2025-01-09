@@ -1,31 +1,20 @@
----
-kind: PersistentVolume
 apiVersion: v1
+kind: Pod
 metadata:
-  name: local-pv
-  namespace: gitlab
-  labels:
-    app: gitlab
+    name: multi-pv-pod
 spec:
-  capacity:
-    storage: 50Gi
-  accessModes:
-    - ReadWriteMany
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: local-path
-  hostPath:
-    path: /home/data
-
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: local-pvc
-  namespace: gitlab
-spec:
-  accessModes:
-    - ReadWriteMany
-  storageClassName: local-path
-  resources:
-    requests:
-      storage: 50Gi
+    containers:
+    - name: my-container
+        image: nginx
+        volumeMounts:
+        - mountPath: "/mnt/volume1"
+            name: volume1
+        - mountPath: "/mnt/volume2"
+            name: volume2
+    volumes:
+    - name: volume1
+        persistentVolumeClaim:
+            claimName: pvc-volume1
+    - name: volume2
+        persistentVolumeClaim:
+            claimName: pvc-volume2

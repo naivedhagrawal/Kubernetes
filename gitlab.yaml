@@ -33,13 +33,11 @@ spec:
             name: config
       volumes:
         - name: data
-          hostPath:
-            path: /home/data/var/opt/gitlab
-            type: Directory
+          persistentVolumeClaim:
+            claimName: local-var
         - name: config
-          hostPath:
-            path: /home/data/etc/gitlab
-            type: Directory
+          persistentVolumeClaim:
+            claimName: local-etc
           
 
 ---
@@ -56,3 +54,67 @@ spec:
     - protocol: TCP
       nodePort: 31000
       port: 80
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-var
+  namespace: gitlab
+  labels:
+    app: gitlab
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-path
+  hostPath:
+    path: /home/data/var
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-etc
+  namespace: gitlab
+  labels:
+    app: gitlab
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-path
+  hostPath:
+    path: /home/data/etc
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: local-var
+  namespace: gitlab
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: local-etc
+  namespace: gitlab
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 10Gi
