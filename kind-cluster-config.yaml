@@ -12,12 +12,12 @@ nodes:
   image: kindest/node:v1.32.0
 - role: worker
   extraMounts:
-  - hostPath: /home/data/var
-    containerPath: /var/opt/gitlab
-  - hostPath: /home/data/etc
-    containerPath: /etc/gitlab
+  - hostPath: ./home/data/var/opt/gitlab
+    containerPath: ./home/data/var/opt/gitlab
+  - hostPath: ./home/data/etc/gitlab
+    containerPath: ./home/data/etc/gitlab
   image: kindest/node:v1.32.0
   #selinuxRelabel: true
 
-  # kind create cluster --config kind-cluster-config.yaml --name kind-cluster
-  # kubectl config set-context --current --namespace=<namespace>
+  # kind create cluster --config kind-cluster-config.yaml --name kind
+  # kubectl config set-context --current --namespace=gitlab
