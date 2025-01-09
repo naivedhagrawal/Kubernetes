@@ -27,18 +27,18 @@ spec:
         ports:
         - containerPort: 80
         volumeMounts:
-          - mountPath: ./var/opt/gitlab
+          - mountPath: /var/opt/gitlab
             name: data
-          - mountPath: ./etc/gitlab
+          - mountPath: /etc/gitlab
             name: config
       volumes:
         - name: data
           hostPath:
-            path: ./home/data/var/opt/gitlab
+            path: /home/data/var/opt/gitlab
             type: Directory
         - name: config
           hostPath:
-            path: ./home/data/etc/gitlab
+            path: /home/data/etc/gitlab
             type: Directory
           
 
