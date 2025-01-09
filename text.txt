@@ -1,11 +1,31 @@
-kind: Cluster
-apiVersion: kind.x-k8s.io/v1alpha4
-nodes:
-    - role: control-plane
-        extraMounts:
-            - hostPath: /path/on/host
-                containerPath: /path/in/container
-    - role: worker
-        extraMounts:
-            - hostPath: /path/on/host
-                containerPath: /path/in/container
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: local-pv
+  namespace: gitlab
+  labels:
+    app: gitlab
+spec:
+  capacity:
+    storage: 50Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-path
+  hostPath:
+    path: /home/data
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: local-pvc
+  namespace: gitlab
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 50Gi
