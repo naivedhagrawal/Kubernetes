@@ -1,3 +1,5 @@
+
+## To create namespace
 kind: Namespace
 apiVersion: v1
 metadata:

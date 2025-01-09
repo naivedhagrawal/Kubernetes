@@ -6,16 +6,40 @@ nodes:
   extraPortMappings:
   - containerPort: 31000
     hostPort: 80
-    listenAddress: "0.0.0.0" # Optional, defaults to "0.0.0.0"
-    protocol: tcp # Optional, defaults to tcp
-    #selinuxRelabel: true
+   # listenAddress: "0.0.0.0" # Optional, defaults to "0.0.0.0"
+   # protocol: tcp # Optional, defaults to tcp
+  - containerPort: 31001
+    hostPort: 8080
+  - containerPort: 31002
+    hostPort: 9000
+  - containerPort: 31003
+    hostPort: 9090
+  - containerPort: 31004
+    hostPort: 4444
+  - containerPort: 31005
+    hostPort: 2222
   image: kindest/node:v1.32.0
+
 - role: worker
   extraMounts:
-  - hostPath: /usr/appdata
-    containerPath: /home/data
+  - hostPath: /usr/appdata/gitlab
+    containerPath: /home/data/gitlab
+  labels:
+    apps: Gitlab-App
   image: kindest/node:v1.32.0
-  #selinuxRelabel: true
+
+- role: worker
+  extraMounts:
+  - hostPath: /usr/appdata/jenkins
+    containerPath: /home/data/jenkins
+  labels:
+    apps: jenkins-App
+  image: kindest/node:v1.32.0
+
+- role: worker
+  labels:
+    apps: jenkins-Agent
+  image: kindest/node:v1.32.0
 
   # kind create cluster --config kind-cluster-config.yaml --name kind
   # kubectl config set-context --current --namespace=gitlab
