@@ -61,7 +61,7 @@ spec:
         - key: kubernetes.io/hostname
           operator: In
           values:
-          - worker-01
+            name: worker-01
 
 ---
 apiVersion: v1
