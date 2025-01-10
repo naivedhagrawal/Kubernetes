@@ -44,7 +44,7 @@ metadata:
   labels:
     type: local
 spec:
-  storageClassName: local-storage
+  storageClassName: local-path
   claimRef:
     name: jenkins-pv-claim
     namespace: devops-tools
@@ -54,14 +54,6 @@ spec:
     - ReadWriteMany
   local:
     path: /home/data/jenkins
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: kubernetes.io/hostname
-          operator: In
-          values:
-          - kind-worker
 
 ---
 apiVersion: v1
@@ -70,7 +62,7 @@ metadata:
   name: jenkins-pv-claim
   namespace: devops-tools
 spec:
-  storageClassName: local-storage
+  storageClassName: local-path
   accessModes:
     - ReadWriteOnce
   resources:
