@@ -67,7 +67,7 @@ metadata:
     app: gitlab
 spec:
   capacity:
-    storage: 10Gi
+    storage: 20Gi
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
@@ -85,7 +85,7 @@ metadata:
     app: gitlab
 spec:
   capacity:
-    storage: 10Gi
+    storage: 1Gi
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
@@ -105,7 +105,7 @@ spec:
   storageClassName: local-path
   resources:
     requests:
-      storage: 10Gi
+      storage: 20Gi
 
 ---
 kind: PersistentVolumeClaim
@@ -119,4 +119,4 @@ spec:
   storageClassName: local-path
   resources:
     requests:
-      storage: 10Gi
+      storage: 1Gi
