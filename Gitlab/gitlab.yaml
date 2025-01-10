@@ -30,9 +30,9 @@ spec:
         - containerPort: 80
         volumeMounts:
           - mountPath: /var/opt/gitlab
-            name: data
+            name: data #/home/data/gitlab/var/opt/gitlab
           - mountPath: /etc/gitlab
-            name: config
+            name: config #/home/data/gitlab/etc/gitlab
       volumes:
         - name: data
           persistentVolumeClaim:
@@ -73,7 +73,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: local-path
   hostPath:
-    path: /home/data/var
+    path: /home/data/gitlab/var/opt/gitlab
 
 ---
 kind: PersistentVolume
@@ -91,7 +91,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: local-path
   hostPath:
-    path: /home/data/etc
+    path: /home/data/gitlab/etc/gitlab
 
 ---
 kind: PersistentVolumeClaim

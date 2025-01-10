@@ -1,9 +1,9 @@
 
 ## To create namespace
-kind: Namespace
-apiVersion: v1
-metadata:
-  name: devops-tools
+##kind: Namespace
+#apiVersion: v1
+#metadata:
+#  name: devops-tools
 
 ---
 
