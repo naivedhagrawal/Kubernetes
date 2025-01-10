@@ -25,7 +25,7 @@ spec:
     spec:
       containers:
       - name: jenkins
-        image: jenkins/jenkins
+        image: jenkins/jenkins:lts
         ports:
         - containerPort: 8080
         volumeMounts:
