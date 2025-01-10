@@ -73,7 +73,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: local-path
   hostPath:
-    path: /home/data/gitlab
+    path: /home/data/gitlab/var
 
 ---
 kind: PersistentVolume
@@ -91,7 +91,7 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: local-path
   hostPath:
-    path: /home/data/gitlab
+    path: /home/data/gitlab/etc
 
 ---
 kind: PersistentVolumeClaim
