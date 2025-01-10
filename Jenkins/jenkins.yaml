@@ -60,8 +60,8 @@ spec:
       - matchExpressions:
         - key: kubernetes.io/hostname
           operator: In
-          name:
-          - worker-01
+          values:
+          - kind-worker
 
 ---
 apiVersion: v1
