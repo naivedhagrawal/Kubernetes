@@ -51,7 +51,7 @@ spec:
   capacity:
     storage: 10Gi
   accessModes:
-    - ReadWriteMany
+    - RReadWriteOnce
   local:
     path: /home/data/jenkins
   nodeAffinity:
@@ -61,7 +61,7 @@ spec:
         - key: kubernetes.io/hostname
           operator: In
           values:
-          - kind-worker
+          - worker-01
 
 ---
 apiVersion: v1
