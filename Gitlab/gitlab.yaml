@@ -3,7 +3,7 @@
 kind: Namespace
 apiVersion: v1
 metadata:
-  name: gitlab
+  name: devops tools
 
 ---
 

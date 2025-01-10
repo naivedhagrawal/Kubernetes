@@ -24,22 +24,10 @@ nodes:
   extraMounts:
   - hostPath: /usr/appdata/gitlab
     containerPath: /home/data/gitlab
-  labels:
-    apps: Gitlab-App
-  image: kindest/node:v1.32.0
-
-- role: worker
-  extraMounts:
   - hostPath: /usr/appdata/jenkins
     containerPath: /home/data/jenkins
-  labels:
-    apps: jenkins-App
   image: kindest/node:v1.32.0
 
-- role: worker
-  labels:
-    apps: jenkins-Agent
-  image: kindest/node:v1.32.0
 
   # kind create cluster --config kind-cluster-config.yaml --name kind
   # kubectl config set-context --current --namespace=gitlab
