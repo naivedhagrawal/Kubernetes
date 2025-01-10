@@ -30,4 +30,4 @@ nodes:
 
 
   # kind create cluster --config kind-cluster-config.yaml --name kind
-  # kubectl config set-context --current --namespace=gitlab
+  # kubectl config set-context --current --namespace=devops_tools
