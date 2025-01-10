@@ -51,7 +51,7 @@ spec:
   capacity:
     storage: 10Gi
   accessModes:
-    - RReadWriteOnce
+    - ReadWriteMany
   local:
     path: /home/data/jenkins
   nodeAffinity:
@@ -72,7 +72,7 @@ metadata:
 spec:
   storageClassName: local-storage
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 10Gi
