@@ -54,6 +54,14 @@ spec:
     - ReadWriteMany
   local:
     path: /home/data/jenkins
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - kind-worker
 
 ---
 apiVersion: v1
