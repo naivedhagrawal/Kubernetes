@@ -105,25 +105,31 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: jenkins
-  namespace: devops-tools
+  name: jenkins-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: jenkins-server
+      app: jenkins
   template:
     metadata:
       labels:
-        app: jenkins-server
+        app: jenkins
     spec:
-      securityContext:
-            fsGroup: 1000
-            runAsUser: 1000
       serviceAccountName: jenkins-admin
+      securityContext:
+            fsGroup: 1000 
+            runAsUser: 1000
       containers:
         - name: jenkins
           image: jenkins/jenkins:lts
+          resources:
+            limits:
+              memory: "2Gi"
+              cpu: "1000m"
+            requests:
+              memory: "500Mi"
+              cpu: "500m"
           ports:
             - name: httpport
               containerPort: 8080
@@ -147,7 +153,7 @@ spec:
             failureThreshold: 3
           volumeMounts:
             - name: jenkins-data
-              mountPath: /var/jenkins_home
+              mountPath: /var/jenkins_home         
       volumes:
         - name: jenkins-data
           persistentVolumeClaim:
@@ -159,15 +165,14 @@ apiVersion: v1
 kind: Service
 metadata:
   name: jenkins-service
-  namespace: devops-tools
   annotations:
       prometheus.io/scrape: 'true'
       prometheus.io/path:   /
       prometheus.io/port:   '8080'
 spec:
-  selector:
-    app: jenkins-server
-  type: NodePort
+  selector: 
+    app: jenkins
+  type: NodePort  
   ports:
     - name: httpport
       port: 8080
