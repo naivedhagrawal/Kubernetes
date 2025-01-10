@@ -103,6 +103,7 @@ spec:
 #Deployment
 ---
 apiVersion: apps/v1
+namespace: devops-tools
 kind: Deployment
 metadata:
   name: jenkins-deployment
@@ -163,6 +164,7 @@ spec:
 ---
 apiVersion: v1
 kind: Service
+namespace: devops-tools
 metadata:
   name: jenkins-service
   annotations:
