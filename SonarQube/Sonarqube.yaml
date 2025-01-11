@@ -39,7 +39,7 @@ spec:
   accessModes:
     - ReadWriteMany
   local:
-    path: /var/lib/postgresql
+    path: /home/data/sonarqube
   nodeAffinity:
     required:
       nodeSelectorTerms:
@@ -114,7 +114,7 @@ spec:
             name: postgres
         volumeMounts:
         - name: postgres
-          mountPath: /var/lib/postgresql
+          mountPath: /var/lib/postgresql/data
       volumes:
           - name: postgres
             persistentVolumeClaim:
