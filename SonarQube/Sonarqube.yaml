@@ -39,7 +39,7 @@ spec:
   accessModes:
     - ReadWriteMany
   local:
-    path: /home/data/sonarqube
+    path: "/home/data/sonarqube:Z"
   nodeAffinity:
     required:
       nodeSelectorTerms:
