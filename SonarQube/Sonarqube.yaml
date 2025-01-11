@@ -39,7 +39,7 @@ spec:
   accessModes:
     - ReadWriteMany
   local:
-    path: /data/postgresql/
+    path: /var/lib/postgresql
   nodeAffinity:
     required:
       nodeSelectorTerms:
