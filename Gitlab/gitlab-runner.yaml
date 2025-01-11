@@ -40,7 +40,7 @@ data:
     concurrent = 4
     [[runners]]
       name = "Kubernetes gitlab Runner"
-      url = "http://gitlab-deployment-548dbf6bd4-cb924"
+      url = "http://gitlab-service.devops-tools.svc.cluster.local:80"
       token = "glrt-t1_tt43Cf4nMa6Vnjz_-DPe"
       executor = "kubernetes"
       [runners.kubernetes]
