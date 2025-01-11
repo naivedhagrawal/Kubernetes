@@ -1,229 +1,119 @@
-#Postgres
-apiVersion: v1
-kind: ConfigMap
+apiVersion: extensions/v1beta1
+kind: Deployment
 metadata:
-  name: postgres
-  namespace: devops-tools
-  labels:
-    app: postgres
-data:
-  POSTGRESQL_USERNAME: sonar_user
-  POSTGRESQL_DATABASE: sonar_db
-  POSTGRESQL_PASSWORD: S0N4RQUB3
+  name: sonar-postgres
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: sonar-postgres
+      labels:
+        name: sonar-postgres
+    spec:
+      containers:
+        - image: postgres:latest
+          name: sonar-postgres
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-pwd
+                  key: password
+            - name: POSTGRES_USER
+              value: sonar
+          ports:
+            - containerPort: 5432
+              name: postgresport
+          volumeMounts:
+            - name: data-disk
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: data-disk
+          persistentVolumeClaim:
+            claimName: claim-postgres
 
-#Persistent Volume
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    name: sonar-postgres
+  name: sonar-postgres
+spec:
+  ports:
+    - port: 5432
+  selector:
+    name: sonar-postgres
+
 ---
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: postgres-pv-volume
-  namespace: devops-tools
+  name: pv0001
   labels:
-    app: postgres
+    type: local
 spec:
   capacity:
     storage: 10Gi
   accessModes:
-    - ReadWriteMany
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: local-path
+    - ReadWriteOnce
   hostPath:
-    path: /home/data/sonarqube
+    path: /data/postgresql/
 
-#Persistent Volume Claim
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: postgres-pv-claim
-  namespace: devops-tools
-  labels:
-    app: postgres
+  name: claim-postgres
 spec:
   accessModes:
-    - ReadWriteMany
-  storageClassName: local-path
+    - ReadWriteOnce
   resources:
     requests:
-      storage: 10Gi
+      storage: 8Gi
 
-#Service
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: sonarqube
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: sonarqube
+      labels:
+        name: sonarqube
+    spec:
+      containers:
+        - image: sonarqube:latest
+          args:
+            - -Dsonar.web.context=/sonar
+          name: sonarqube
+          env:
+            - name: SONARQUBE_JDBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-pwd
+                  key: password
+            - name: SONARQUBE_JDBC_URL
+              value: jdbc:postgresql://sonar-postgres:5432/sonar
+          ports:
+            - containerPort: 9000
+              name: sonarqube
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres
-  namespace: devops-tools
   labels:
-    app: postgres
-spec:
-  ports:
-  - port: 5432
-    name: postgres
-  selector:
-    app: postgres
-
-#Deployment
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: postgres
-  namespace: devops-tools
-  labels:
-    app: postgres
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: postgres
-  template:
-    metadata:
-      labels:
-        app: postgres
-    spec:
-      securityContext:
-        fsGroup: 2000 
-      containers:
-      - name: postgres
-        image: postgres:12
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: 5432
-        env:
-        - name: ALLOW_EMPTY_PASSWORD
-          value: "yes"
-        envFrom:
-        - configMapRef:
-            name: postgres
-        volumeMounts:
-        - name: postgres
-          mountPath: var/lib/postgresql
-      volumes:
-          - name: postgres
-            persistentVolumeClaim:
-              claimName: postgres-pv-claim
-
-#SonarQube
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: sonar-config
-  namespace: devops-tools
-  labels:
-    app: sonar
-data:
-  SONARQUBE_JDBC_URL: "jdbc:postgresql://postgres:5432/sonar_db"
-  SONARQUBE_JDBC_USERNAME: "sonar_user"
-  SONARQUBE_JDBC_PASSWORD: "S0N4RQUB3"
-  JAVA_OPTS: "-Duser.timezone=Asia/Jakarta -Xmx2048m"
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
+    name: sonar
   name: sonar
-  namespace: devops-tools
-  labels:
-    app: sonar
-spec:
-  replicas: 1
-  strategy:
-    type: Recreate
-  selector:
-    matchLabels:
-      app: sonar
-  template:
-    metadata:
-      labels:
-        app: sonar
-    spec:
-      initContainers:
-      - name: init
-        image: busybox
-        command:
-        - sysctl
-        - -w
-        - vm.max_map_count=262144
-        imagePullPolicy: IfNotPresent
-        securityContext:
-          privileged: true
-      containers:
-      - name: sonarqube
-        image: sonarqube:community
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: 9000
-        envFrom:
-        - configMapRef:
-            name: sonar-config
-        volumeMounts:
-        - name: app-pvc
-          mountPath: "/opt/sonarqube/data/"
-          subPath: data
-        - name: app-pvc
-          mountPath: "/opt/sonarqube/extensions/"
-          subPath: extensions
-        resources:
-          requests:
-            memory: "1024Mi"
-          limits:
-            memory: "2048Mi"
-      volumes:
-      - name: app-pvc
-        persistentVolumeClaim:
-          claimName: sonar-pv-claim
-
-#Service
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: sonar-svc
-  namespace: devops-tools
-  labels:
-    app: sonar
 spec:
   type: NodePort
   ports:
-  - port: 9000
-    nodePort: 31002
-    name: sonar
+    - port: 80
+      targetPort: 9000
+      nodePort: 31002
   selector:
-    app: sonar
-
-#Persistent Volume
----
-kind: PersistentVolume
-apiVersion: v1
-metadata:
-  name: sonar-pv-volume
-  namespace: devops-tools
-  labels:
-    app: sonar
-spec:
-  capacity:
-    storage: 10Gi
-  accessModes:
-    - ReadWriteMany
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: local-path
-  hostPath:
-    path: /home/data/sonarqube
-
-#Persistent Volume Claim
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: sonar-pv-claim
-  namespace: devops-tools
-  labels:
-    app: sonar
-spec:
-  accessModes:
-    - ReadWriteMany
-  storageClassName: local-path
-  resources:
-    requests:
-      storage: 10Gi
+    name: sonarqube
