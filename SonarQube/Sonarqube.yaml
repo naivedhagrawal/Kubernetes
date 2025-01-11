@@ -102,7 +102,6 @@ spec:
               value: jdbc:postgresql://sonar-postgres:5432/sonar
           ports:
             - containerPort: 9000
-              name: sonarqube
 
 ---
 apiVersion: v1
@@ -114,6 +113,8 @@ metadata:
   name: sonar
 spec:
   type: NodePort
+  selector:
+    app: sonarqube
   ports:
     - port: 9000
       nodePort: 31002
