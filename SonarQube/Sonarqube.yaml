@@ -1,3 +1,4 @@
+#Postgres
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -9,6 +10,57 @@ data:
   POSTGRESQL_USERNAME: sonar_user
   POSTGRESQL_DATABASE: sonar_db
   POSTGRESQL_PASSWORD: S0N4RQUB3
+
+---
+#Volumes
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: local-storage
+provisioner: kubernetes.io/no-provisioner
+volumeBindingMode: WaitForFirstConsumer
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: postgres-pv-volume
+  labels:
+    type: local
+spec:
+  storageClassName: local-storage
+  claimRef:
+    name: postgres-pvc-claim
+    namespace: devops-tools
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  local:
+    path: /home/data/sonarqube
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - kind-worker
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc-claim
+  namespace: devops-tools
+spec:
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
 ---
 apiVersion: v1
 kind: Service
@@ -44,7 +96,7 @@ spec:
       securityContext:
         fsGroup: 2000 
       containers:
-      - name: postgress
+      - name: postgres
         image: postgres:13.3
         imagePullPolicy: IfNotPresent
         ports:
@@ -61,22 +113,10 @@ spec:
       volumes:
       - name: postgres
         persistentVolumeClaim:
-          claimName: postgres-pvc
----
+          claimName: postgres-pvc-claim
 
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: postgres-pvc
-  namespace: devops-tools
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
+#SonarQube
 ---
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -143,7 +183,7 @@ spec:
       volumes:
       - name: app-pvc
         persistentVolumeClaim:
-          claimName: sonar-pvc
+          claimName: sonar-pvc-claim
 ---
 apiVersion: v1
 kind: Service
@@ -162,14 +202,42 @@ spec:
     app: sonar
 
 ---
-kind: PersistentVolumeClaim
 apiVersion: v1
+kind: PersistentVolume
 metadata:
-  name: sonar-pvc
+  name: sonar-pv-volume
+  labels:
+    type: local
+spec:
+  storageClassName: local-storage
+  claimRef:
+    name: sonar-pvc-claim
+    namespace: devops-tools
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  local:
+    path: /home/data/sonarqube
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - kind-worker
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sonar-pvc-claim
   namespace: devops-tools
 spec:
+  storageClassName: local-storage
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 10Gi
