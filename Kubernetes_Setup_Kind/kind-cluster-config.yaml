@@ -18,7 +18,7 @@ nodes:
     hostPort: 4444
   - containerPort: 31005
     hostPort: 2222
-  image: kindest/node:v1.32.0
+  image: kindest/node
 
 - role: worker
   extraMounts:
@@ -26,7 +26,7 @@ nodes:
     containerPath: /home/data/gitlab
   - hostPath: /usr/appdata/jenkins
     containerPath: /home/data/jenkins
-  image: kindest/node:v1.32.0
+  image: kindest/node
 
 
   # kind create cluster --config kind-cluster-config.yaml --name kind
