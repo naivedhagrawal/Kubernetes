@@ -39,7 +39,7 @@ spec:
   accessModes:
     - ReadWriteMany
   local:
-    path: /data/sonarqube
+    path: /data/postgresql/
   nodeAffinity:
     required:
       nodeSelectorTerms:
