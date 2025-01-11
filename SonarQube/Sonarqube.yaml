@@ -45,7 +45,7 @@ spec:
         fsGroup: 2000 
       containers:
       - name: postgress
-        image: bitnami/postgresql
+        image: postgres:13.3
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5432
@@ -57,7 +57,7 @@ spec:
             name: postgres
         volumeMounts:
         - name: postgres
-          mountPath: /bitnami/postgresql
+          mountPath: /var/lib/postgresql
       volumes:
       - name: postgres
         persistentVolumeClaim:
@@ -121,7 +121,7 @@ spec:
           privileged: true
       containers:
       - name: sonarqube
-        image: sonarqube:8.9.1-community
+        image: sonarqube:community
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9000
