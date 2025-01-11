@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sonar-postgres
+  name: sonar-postgres-dep
   namespace: devops-tools
 spec:
   replicas: 1
@@ -12,7 +12,7 @@ spec:
     metadata:
       name: sonar-postgres-dep
       labels:
-        name: sonar-postgres
+        app: sonar-postgres
     spec:
       containers:
         - image: postgres:latest
