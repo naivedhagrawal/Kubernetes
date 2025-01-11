@@ -11,54 +11,36 @@ data:
   POSTGRESQL_DATABASE: sonar_db
   POSTGRESQL_PASSWORD: S0N4RQUB3
 
----
-#Volumes
----
-kind: StorageClass
-apiVersion: storage.k8s.io/v1
-metadata:
-  name: local-storage
-provisioner: kubernetes.io/no-provisioner
-volumeBindingMode: WaitForFirstConsumer
-
 #Persistent Volume
 ---
-apiVersion: v1
 kind: PersistentVolume
+apiVersion: v1
 metadata:
   name: postgres-pv-volume
+  namespace: devops-tools
   labels:
-    type: local
+    app: postgres
 spec:
-  storageClassName: local-storage
-  claimRef:
-    name: postgres-pv-claim
-    namespace: devops-tools
   capacity:
     storage: 10Gi
   accessModes:
     - ReadWriteMany
-  local:
-    path: "/home/data/sonarqube:Z"
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: kubernetes.io/hostname
-          operator: In
-          values:
-          - kind-worker
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-path
+  hostPath:
+    path: /home/data/sonarqube
+
 #Persistent Volume Claim
 ---
-apiVersion: v1
 kind: PersistentVolumeClaim
+apiVersion: v1
 metadata:
   name: postgres-pv-claim
   namespace: devops-tools
 spec:
-  storageClassName: local-storage
   accessModes:
     - ReadWriteMany
+  storageClassName: local-path
   resources:
     requests:
       storage: 10Gi

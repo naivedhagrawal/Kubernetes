@@ -1,12 +1,5 @@
 
-## To create namespace
-#kind: Namespace
-#apiVersion: v1
-#metadata:
- # name: devops-tools
-
-#---
-
+#Deploying Gitlab on Kubernetes
 kind: Deployment
 apiVersion: apps/v1
 metadata:
@@ -41,7 +34,7 @@ spec:
           persistentVolumeClaim:
             claimName: local-etc
           
-
+#Service
 ---
 kind: Service
 apiVersion: v1
@@ -57,6 +50,7 @@ spec:
       nodePort: 31000
       port: 80
 
+#Persistent Volume and Persistent Volume Claim
 ---
 kind: PersistentVolume
 apiVersion: v1
@@ -74,7 +68,6 @@ spec:
   storageClassName: local-path
   hostPath:
     path: /home/data/gitlab/var
-
 ---
 kind: PersistentVolume
 apiVersion: v1
