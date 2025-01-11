@@ -43,8 +43,6 @@ metadata:
 spec:
   ports:
     - port: 5432
-  selector:
-    name: sonar-postgres
 
 ---
 kind: PersistentVolume
@@ -117,6 +115,5 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: 80
-      targetPort: 9000
+    - port: 9000
       nodePort: 31002
