@@ -21,6 +21,7 @@ metadata:
 provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: WaitForFirstConsumer
 
+#Persistent Volume
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -31,7 +32,7 @@ metadata:
 spec:
   storageClassName: local-storage
   claimRef:
-    name: postgres-pvc-claim
+    name: postgres-pv-claim
     namespace: devops-tools
   capacity:
     storage: 10Gi
@@ -47,12 +48,12 @@ spec:
           operator: In
           values:
           - kind-worker
-
+#Persistent Volume Claim
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: postgres-pvc-claim
+  name: postgres-pv-claim
   namespace: devops-tools
 spec:
   storageClassName: local-storage
@@ -61,6 +62,8 @@ spec:
   resources:
     requests:
       storage: 10Gi
+
+#Service
 ---
 apiVersion: v1
 kind: Service
@@ -75,6 +78,8 @@ spec:
     name: postgres
   selector:
     app: postgres
+
+#Deployment
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -111,9 +116,9 @@ spec:
         - name: postgres
           mountPath: /var/lib/postgresql
       volumes:
-      - name: postgres
-        persistentVolumeClaim:
-          claimName: postgres-pvc-claim
+          - name: postgres
+            persistentVolumeClaim:
+              claimName: postgres-pv-claim
 
 #SonarQube
 ---
@@ -211,7 +216,7 @@ metadata:
 spec:
   storageClassName: local-storage
   claimRef:
-    name: sonar-pvc-claim
+    name: sonar-pv-claim
     namespace: devops-tools
   capacity:
     storage: 10Gi
@@ -232,7 +237,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: sonar-pvc-claim
+  name: sonar-pv-claim
   namespace: devops-tools
 spec:
   storageClassName: local-storage

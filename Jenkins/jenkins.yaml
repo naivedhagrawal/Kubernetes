@@ -60,6 +60,8 @@ metadata:
   name: local-storage
 provisioner: kubernetes.io/no-provisioner
 volumeBindingMode: WaitForFirstConsumer
+
+#Persistent Volume
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -87,6 +89,7 @@ spec:
           values:
           - kind-worker
 
+#Persistent Volume Claim
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -125,6 +128,7 @@ spec:
       containers:
         - name: jenkins
           image: jenkins/jenkins:lts
+          imagePullPolicy: IfNotPresent
           resources:
             limits:
               memory: "2Gi"
