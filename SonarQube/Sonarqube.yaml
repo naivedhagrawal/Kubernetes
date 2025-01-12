@@ -39,7 +39,7 @@ spec:
               value: "yes"
           envFrom:
             - configMapRef:
-              name: postgres
+              name: sonar-postgres
           ports:
             - containerPort: 5432
               name: postgresport
