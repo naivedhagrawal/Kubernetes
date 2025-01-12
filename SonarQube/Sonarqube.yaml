@@ -32,10 +32,10 @@ spec:
       securityContext:
         fsGroup: 2000 
       containers:
-          - image: postgres:latest
-            name: sonar-postgres
-            env:
-            - name: ALLOW_EMPTY_PASSWORD
+        - image: postgres:latest
+          name: sonar-postgres
+          env:
+          - name: ALLOW_EMPTY_PASSWORD
             value: "yes"
             envFrom:
             - configMapRef:
@@ -46,7 +46,7 @@ spec:
             volumeMounts:
             - name: data-disk
               mountPath: /var/lib/postgresql/data
-            livenessProbe:
+          livenessProbe:
             exec:
               command:
               - /bin/sh
