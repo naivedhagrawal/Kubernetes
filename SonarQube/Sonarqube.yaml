@@ -179,7 +179,7 @@ spec:
             - -Dsonar.web.context=/sonar
           name: sonarqube
           envFrom:
-        - configMapRef:
+          - configMapRef:
             name: sonar-config
           ports:
             - containerPort: 9000
