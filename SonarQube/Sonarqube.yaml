@@ -6,9 +6,9 @@ metadata:
   labels:
     app: sonar-postgres
 data:
-  POSTGRESQL_USERNAME: "sonar_user"
-  POSTGRESQL_DATABASE: "sonar_db"
-  POSTGRESQL_PASSWORD: "S0N4RQUB3"
+  POSTGRES_USERNAME: "sonar_user"
+  POSTGRES_DATABASE: "sonar_db"
+  POSTGRES_PASSWORD: "S0N4RQUB3"
 ---
 # StatefulSet Postgres Database
 apiVersion: apps/v1
