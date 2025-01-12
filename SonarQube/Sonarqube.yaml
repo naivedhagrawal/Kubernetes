@@ -35,10 +35,10 @@ spec:
         - image: postgres:latest
           name: sonar-postgres
           env:
-          - name: ALLOW_EMPTY_PASSWORD
-            value: "yes"
+            - name: ALLOW_EMPTY_PASSWORD
+              value: "yes"
           envFrom:
-          - configMapRef:
+            - configMapRef:
               name: postgres
           ports:
             - containerPort: 5432
@@ -179,8 +179,8 @@ spec:
             - -Dsonar.web.context=/sonar
           name: sonarqube
           envFrom:
-          - configMapRef:
-            name: sonar-config
+            - configMapRef:
+              name: sonar-config
           ports:
             - containerPort: 9000
           volumeMounts:
