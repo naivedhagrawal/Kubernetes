@@ -1,9 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sonar-postgres
+  namespace: devops-tools
+  labels:
+    app: sonar-postgres
+data:
+  POSTGRESQL_USERNAME: sonar_user
+  POSTGRESQL_DATABASE: sonar_db
+  POSTGRESQL_PASSWORD: S0N4RQUB3
+---
 # StatefulSet Postgres Database
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: sonar-postgres-dep
   namespace: devops-tools
+  labels:
+    app: sonar-postgres
 spec:
   replicas: 1
   selector:
@@ -15,24 +29,24 @@ spec:
       labels:
         app: sonar-postgres
     spec:
+      securityContext:
+        fsGroup: 2000 
       containers:
-        - image: postgres:latest
-          name: sonar-postgres
-          env:
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-pwd
-                  key: password
-            - name: POSTGRES_USER
-              value: sonar
-          ports:
+          - image: postgres:latest
+            name: sonar-postgres
+            env:
+            - name: ALLOW_EMPTY_PASSWORD
+            value: "yes"
+            envFrom:
+            - configMapRef:
+              name: postgres
+            ports:
             - containerPort: 5432
               name: postgresport
-          volumeMounts:
+            volumeMounts:
             - name: data-disk
               mountPath: /var/lib/postgresql/data
-          livenessProbe:
+            livenessProbe:
             exec:
               command:
               - /bin/sh
@@ -55,6 +69,8 @@ kind: Service
 metadata:
   namespace: devops-tools
   name: sonar-postgres
+  labels:
+    app: sonar-postgres
 spec:
   selector:
     app: sonar-postgres
@@ -113,6 +129,19 @@ spec:
   resources:
     requests:
       storage: 10Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sonar-config
+  namespace: devops-tools
+  labels:
+    app: sonarqube
+  data:
+  SONARQUBE_JDBC_URL: "jdbc:postgresql://postgres:5432/sonar_db"
+  SONARQUBE_JDBC_USERNAME: "sonar_user"
+  SONARQUBE_JDBC_PASSWORD: "S0N4RQUB3"
+  JAVA_OPTS: "-Duser.timezone=Asia/Jakarta -Xmx2048m"
 
 #SonarQube Deployment and Service
 ---
@@ -123,6 +152,8 @@ metadata:
   namespace: devops-tools
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: sonarqube
@@ -132,19 +163,24 @@ spec:
       labels:
         app: sonarqube
     spec:
+      initContainers:
+      - name: init
+        image: busybox
+        command:
+        - sysctl
+        - -w
+        - vm.max_map_count=262144
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: true
       containers:
         - image: sonarqube:community
           args:
             - -Dsonar.web.context=/sonar
           name: sonarqube
-          env:
-            - name: SONARQUBE_JDBC_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-pwd #kubectl create secret generic postgres-pwd --from-literal=password=CodeRise_Pass
-                  key: password
-            - name: SONARQUBE_JDBC_URL
-              value: jdbc:postgresql://sonar-postgres:5432/sonar
+          envFrom:
+        - configMapRef:
+            name: sonar-config
           ports:
             - containerPort: 9000
           volumeMounts:
