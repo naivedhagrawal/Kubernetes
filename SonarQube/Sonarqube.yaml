@@ -173,7 +173,7 @@ spec:
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
-      containers:
+        containers:
         - image: sonarqube:community
           args:
             - -Dsonar.web.context=/sonar
