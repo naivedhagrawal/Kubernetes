@@ -103,7 +103,7 @@ spec:
         app: sonarqube
     spec:
       containers:
-        - image: sonarqube:latest
+        - image: sonarqube:community
           args:
             - -Dsonar.web.context=/sonar
           name: sonarqube
