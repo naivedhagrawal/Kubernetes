@@ -163,7 +163,7 @@ spec:
       labels:
         app: sonarqube
     spec:
-      extrainitContainers:
+      initContainers:
       - name: init
         image: busybox
         command:
