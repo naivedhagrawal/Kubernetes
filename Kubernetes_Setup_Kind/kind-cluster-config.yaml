@@ -26,6 +26,10 @@ nodes:
     containerPath: /home/data/gitlab
   - hostPath: /usr/appdata/jenkins
     containerPath: /home/data/jenkins
+  - hostPath: /usr/appdata/jenkins
+    containerPath: /home/data/sonar-postgres
+  - hostPath: /usr/appdata/jenkins
+    containerPath: /home/data/sonar
   #image: kindest/node:v1.32.0
 
 
