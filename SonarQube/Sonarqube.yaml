@@ -125,7 +125,7 @@ spec:
                   name: postgres-pwd #kubectl create secret generic postgres-pwd --from-literal=password=CodeRise_Pass
                   key: password
             - name: SONARQUBE_JDBC_URL
-              value: jdbc:postgresql://sonar-postgres.devops-tools.svc.cluster.local:5432/sonar
+              value: jdbc:postgresql://sonar-postgres:5432/sonar
           ports:
             - containerPort: 9000
 
