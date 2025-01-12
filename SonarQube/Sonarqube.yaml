@@ -1,5 +1,6 @@
+# StatefulSet Postgres Database
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: sonar-postgres-dep
   namespace: devops-tools
@@ -36,6 +37,7 @@ spec:
           persistentVolumeClaim:
             claimName: claim-postgres
 
+#Service for Postgres Database            
 ---
 apiVersion: v1
 kind: Service
@@ -43,15 +45,18 @@ metadata:
   namespace: devops-tools
   name: sonar-postgres
 spec:
+  selector:
+    app: sonar-postgres
   ports:
     - port: 5432
 
+#Persistent Volume and Persistent Volume Claim for Postgres Database
 ---
 kind: PersistentVolume
 apiVersion: v1
 metadata:
   namespace: devops-tools
-  name: pv0001
+  name: sonar-postgres-pv
   labels:
     type: local
     app: sonar-postgres
@@ -59,23 +64,25 @@ spec:
   capacity:
     storage: 10Gi
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
   hostPath:
-    path: /data/postgresql/
+    path: /home/data/sonar-postgres
 
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   namespace: devops-tools
-  name: claim-postgres
+  name: sonar-postgres-pvc
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
-      storage: 8Gi
+      storage: 10Gi
 
+#SonarQube Deployment and Service
 ---
 apiVersion: apps/v1
 kind: Deployment
