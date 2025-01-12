@@ -179,7 +179,7 @@ metadata:
   name: sonar-pv
   labels:
     type: local
-    app: sonar-postgres
+    app: sonarqube
 spec:
   storageClassName: local-storage
   claimRef:
