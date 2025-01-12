@@ -33,11 +33,11 @@ spec:
             - name: data-disk
               mountPath: /var/lib/pgsql/data
           livenessProbe:
-          exec:
-            command:
-            - /bin/sh
-            - -c
-            - exec pg_isready -U "postgres" -h 127.0.0.1 -p 5432
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - exec pg_isready -U "postgres" -h 127.0.0.1 -p 5432
             failureThreshold: 6
             initialDelaySeconds: 30
             periodSeconds: 10
