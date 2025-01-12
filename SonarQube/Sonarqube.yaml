@@ -31,11 +31,11 @@ spec:
               name: postgresport
           volumeMounts:
             - name: data-disk
-              mountPath: /var/lib/postgresql/data
+              mountPath: /var/lib/postgresql
       volumes:
         - name: data-disk
           persistentVolumeClaim:
-            claimName: claim-postgres
+            claimName: sonar-postgres-pvc
 
 #Service for Postgres Database            
 ---
