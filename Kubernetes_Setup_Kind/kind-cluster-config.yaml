@@ -26,12 +26,13 @@ nodes:
     containerPath: /home/data/gitlab
   - hostPath: /usr/appdata/jenkins
     containerPath: /home/data/jenkins
-  - hostPath: /usr/appdata/jenkins
+  - hostPath: /usr/appdata/sonar-postgres
     containerPath: /home/data/sonar-postgres
-  - hostPath: /usr/appdata/jenkins
+  - hostPath: /usr/appdata/sonar
     containerPath: /home/data/sonar
   #image: kindest/node:v1.32.0
 
 
   # kind create cluster --config kind-cluster-config.yaml --name kind
+  # kubectl apply -f namespace.yaml
   # kubectl config set-context --current --namespace=devops-tools
