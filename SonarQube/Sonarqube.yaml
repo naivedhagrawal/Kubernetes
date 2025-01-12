@@ -37,9 +37,9 @@ spec:
           env:
             - name: ALLOW_EMPTY_PASSWORD
               value: "yes"
-              envFrom:
-              - configMapRef:
-                name: postgres-config
+          envFrom:
+            - configMapRef:
+              name: postgres-config
           ports:
             - containerPort: 5432
               name: postgresport
