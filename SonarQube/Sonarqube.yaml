@@ -149,7 +149,7 @@ spec:
             - containerPort: 9000
           volumeMounts:
             - name: data-disk
-              mountPath: /opt/sonarqube/conf
+              mountPath: /opt/sonarqube
       volumes:
         - name: data-disk
           persistentVolumeClaim:
@@ -186,7 +186,7 @@ spec:
     name: sonar-pvc
     namespace: devops-tools
   capacity:
-    storage: 10Gi
+    storage: 1Gi
   accessModes:
     - ReadWriteMany
   local:
@@ -212,4 +212,4 @@ spec:
   storageClassName: local-storage
   resources:
     requests:
-      storage: 10Gi
+      storage: 1Gi
