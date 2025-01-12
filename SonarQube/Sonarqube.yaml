@@ -39,7 +39,7 @@ spec:
               value: "yes"
           envFrom:
             - configMapRef:
-              name: postgres-config
+                name: postgres-config
           ports:
             - containerPort: 5432
               name: postgresport
@@ -180,7 +180,7 @@ spec:
           name: sonarqube
           envFrom:
             - configMapRef:
-              name: sonar-config
+                name: sonar-config
           ports:
             - containerPort: 9000
           volumeMounts:
