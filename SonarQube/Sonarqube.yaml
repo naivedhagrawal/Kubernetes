@@ -66,6 +66,7 @@ spec:
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-path
   hostPath:
     path: /home/data/sonar-postgres
 
@@ -78,6 +79,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteMany
+  storageClassName: local-path
   resources:
     requests:
       storage: 10Gi
