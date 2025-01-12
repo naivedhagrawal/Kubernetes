@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: sonar-postgres
+  name: postgres-config
   namespace: devops-tools
   labels:
     app: sonar-postgres
@@ -37,9 +37,9 @@ spec:
           env:
             - name: ALLOW_EMPTY_PASSWORD
               value: "yes"
-          envFrom:
-            - configMapRef:
-              name: sonar-postgres
+              envFrom:
+              - configMapRef:
+                name: postgres-config
           ports:
             - containerPort: 5432
               name: postgresport
