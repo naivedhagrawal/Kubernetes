@@ -164,7 +164,7 @@ spec:
         app: sonarqube
     spec:
       initContainers:
-      - name: init
+      - name: increase-fd-ulimit
         image: busybox
         command:
         - sysctl
