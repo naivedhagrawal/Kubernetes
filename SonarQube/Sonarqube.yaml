@@ -166,6 +166,7 @@ spec:
     spec:
       initContainers:
       - name: init
+        runAsUser: 0
         image: busybox
         command:
         - sysctl
