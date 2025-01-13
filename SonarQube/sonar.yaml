@@ -8,9 +8,9 @@ metadata:
     app: sonar-postgres
 type: Opaque
 data:
-  POSTGRES_DB: "sonar"
-  POSTGRES_USER: "sonar"
-  POSTGRES_PASSWORD: "sonar"
+  POSTGRES_DB: sonar
+  POSTGRES_USER: sonar
+  POSTGRES_PASSWORD: sonar
 ---
 # StatefulSet Postgres Database
 apiVersion: apps/v1
