@@ -177,7 +177,6 @@ spec:
         securityContext:
           privileged: true
           allowPrivilegeEscalation: true
-          runAsRoot: true
       containers:
       - image: sonarqube:community
         args:
