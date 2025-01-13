@@ -188,6 +188,8 @@ spec:
           volumeMounts:
             - name: data-disk
               mountPath: /opt/sonarqube
+          securityContext:
+            privileged: true
       volumes:
         - name: data-disk
           persistentVolumeClaim:
