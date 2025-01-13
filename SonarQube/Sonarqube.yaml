@@ -166,7 +166,7 @@ spec:
         app: sonarqube
     spec:
       initContainers:
-      - name: init
+      - name: sonarqube
         image: busybox
         command:
         - sysctl
@@ -175,9 +175,6 @@ spec:
         - fs.file-max=131072
         imagePullPolicy: IfNotPresent
         securityContext:
-          capabilities:
-            add:
-              - SYS_ADMIN
           privileged: true
           allowPrivilegeEscalation: true
           runAsUser: 0
