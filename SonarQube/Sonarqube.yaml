@@ -185,6 +185,8 @@ spec:
             name: sonar-config
         ports:
         - containerPort: 9000
+        securityContext:
+            privileged: true
         volumeMounts:
           - name: data-disk
             mountPath: /opt/sonarqube
