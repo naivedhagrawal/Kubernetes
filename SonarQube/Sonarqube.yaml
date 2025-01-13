@@ -142,7 +142,7 @@ data:
   SONARQUBE_JDBC_URL: "jdbc:postgresql://sonar-postgres.devops-tools.svc.cluster.local:5432/sonar_db"
   SONARQUBE_JDBC_USERNAME: "sonar_user"
   SONARQUBE_JDBC_PASSWORD: "S0N4RQUB3"
-  JAVA_OPTS: "-Duser.timezone=Asia/Jakarta -Xmx2048m"
+  JAVA_OPTS: "-Duser.timezone=Asia/Kolkata -Xmx2048m"
 
 #SonarQube Deployment and Service
 ---
