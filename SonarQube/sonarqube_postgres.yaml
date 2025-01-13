@@ -134,7 +134,7 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - Port: 9000
+    - port: 9000
       nodePort: 30002
       name: sonarport
   selector:
