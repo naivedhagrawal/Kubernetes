@@ -15,7 +15,7 @@ spec:
         name: sonar-postgres
     spec:
       containers:
-        - image: postgres:12.1
+        - image: postgres:latest
           name: sonar-postgres
           env:
             - name: POSTGRES_PASSWORD
@@ -97,7 +97,7 @@ spec:
         name: sonarqube
     spec:
       containers:
-        - image: sonarqube:7.9.1-community
+        - image: sonarqube:community
           name: sonarqube
           env:
             - name: SONARQUBE_JDBC_PASSWORD
