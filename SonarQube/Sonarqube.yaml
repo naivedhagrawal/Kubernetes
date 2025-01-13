@@ -165,10 +165,6 @@ spec:
       labels:
         app: sonarqube
     spec:
-      securityContext:
-        runAsNonRoot: true
-        fsGroup: 1000
-        runAsUser: 1000
       initContainers:
       - name: init
         image: busybox
@@ -180,7 +176,10 @@ spec:
         imagePullPolicy: IfNotPresent
         securityContext:
             privileged: true
-            #allowPrivilegeEscalation: true
+            allowPrivilegeEscalation: true
+            runAsNonRoot: true
+            fsGroup: 1000
+            runAsUser: 1000
       containers:
       - image: sonarqube:community
         args:
