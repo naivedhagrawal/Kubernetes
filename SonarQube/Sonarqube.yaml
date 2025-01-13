@@ -176,18 +176,18 @@ spec:
         securityContext:
           privileged: true
       containers:
-        - image: sonarqube:community
-          args:
-            - -Dsonar.web.context=/sonar
-          name: sonarqube
-          envFrom:
-            - configMapRef:
-                name: sonar-config
-          ports:
-            - containerPort: 9000
-          volumeMounts:
-            - name: data-disk
-              mountPath: /opt/sonarqube
+      - image: sonarqube:community
+        args:
+        - -Dsonar.web.context=/sonar
+        name: sonarqube
+        envFrom:
+        - configMapRef:
+            name: sonar-config
+        ports:
+        - containerPort: 9000
+        volumeMounts:
+          - name: data-disk
+            mountPath: /opt/sonarqube
       volumes:
         - name: data-disk
           persistentVolumeClaim:
