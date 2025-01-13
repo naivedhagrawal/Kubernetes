@@ -171,6 +171,7 @@ spec:
         - sysctl
         - -w
         - vm.max_map_count=262144
+        - fs.file-max=65536
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
