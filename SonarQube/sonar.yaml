@@ -150,9 +150,9 @@ spec:
               value: jdbc:postgresql://sonar-postgres:5432/sonar
           ports:
             - containerPort: 9000
-          volumeMounts:
-            - name: data-disk
-              mountPath: /opt/sonarqube
+          #volumeMounts:
+            #- name: data-disk
+              #mountPath: /opt/sonarqube
       initContainers:
         - name: sysctl
           image: busybox
@@ -160,10 +160,10 @@ spec:
           command: ['sysctl', '-w', 'vm.max_map_count=262144']
           securityContext:
             privileged: true
-      volumes:
-        - name: data-disk
-          persistentVolumeClaim:
-            claimName: sonar-pvc
+      #volumes:
+        #- name: data-disk
+          #persistentVolumeClaim:
+            #claimName: sonar-pvc
 
 #Service for SonarQube
 ---
@@ -180,46 +180,3 @@ spec:
     - port: 9000
       nodePort: 31002
 
-#Persistent Volume and Persistent Volume Claim for SonarQube
----
-kind: PersistentVolume
-apiVersion: v1
-metadata:
-  namespace: devops-tools
-  name: sonar-pv
-  labels:
-    type: local
-    app: sonarqube
-spec:
-  storageClassName: local-storage
-  claimRef:
-    name: sonar-pvc
-    namespace: devops-tools
-  capacity:
-    storage: 1Gi
-  accessModes:
-    - ReadWriteMany
-  local:
-    path: /home/data/sonar
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: kubernetes.io/hostname
-          operator: In
-          values:
-          - kind-worker
-
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  namespace: devops-tools
-  name: sonar-pvc
-spec:
-  accessModes:
-    - ReadWriteMany
-  storageClassName: local-storage
-  resources:
-    requests:
-      storage: 1Gi
