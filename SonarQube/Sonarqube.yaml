@@ -165,13 +165,6 @@ spec:
       labels:
         app: sonarqube
     spec:
-      initContainers:
-        - name: sysctl
-          image: busybox
-          imagePullPolicy: IfNotPresent
-          command: ['sysctl', '-w', 'vm.max_map_count=262144']
-          securityContext:
-            privileged: true
       containers:
       - image: sonarqube:community
         args:
@@ -187,6 +180,13 @@ spec:
         volumeMounts:
           - name: data-disk
             mountPath: /opt/sonarqube
+      initContainers:
+        - name: sysctl
+          image: busybox
+          imagePullPolicy: IfNotPresent
+          command: ['sysctl', '-w', 'vm.max_map_count=262144']
+          securityContext:
+            privileged: true
       volumes:
         - name: data-disk
           persistentVolumeClaim:
