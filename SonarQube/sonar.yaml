@@ -164,20 +164,20 @@ spec:
         app: sonarqube
     spec:
       containers:
-      - image: sonarqube:community
-        args:
-          - -Dsonar.web.context=/sonar
-        name: sonarqube
-        envFrom:
-          - configMapRef:
-              name: sonar-config
-        ports:
-          - containerPort: 9000
-        securityContext:
+        - image: sonarqube:community
+          args:
+            - -Dsonar.web.context=/sonar
+          name: sonarqube
+          envFrom:
+            - configMapRef:
+                name: sonar-config
+          ports:
+            - containerPort: 9000
+          securityContext:
             privileged: true
-        volumeMounts:
-          - name: data-disk
-            mountPath: /opt/sonarqube
+          volumeMounts:
+            - name: data-disk
+              mountPath: /opt/sonarqube
       initContainers:
         - name: sysctl
           image: busybox
@@ -185,10 +185,10 @@ spec:
           command: ['sysctl', '-w', 'vm.max_map_count=262144']
           securityContext:
             privileged: true
-    volumes:
-      - name: data-disk
-        persistentVolumeClaim:
-          claimName: sonar-pvc
+      volumes:
+        - name: data-disk
+          persistentVolumeClaim:
+            claimName: sonar-pvc
 
 #Service for SonarQube
 ---
