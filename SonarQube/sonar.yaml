@@ -1,12 +1,11 @@
 #Postgres Secret
 apiVersion: v1
-kind: Secret
+kind: ConfigMap
 metadata:
   name: postgres-secret
   namespace: devops-tools
   labels:
     app: sonar-postgres
-type: Opaque
 data:
   POSTGRES_DB: sonar
   POSTGRES_USER: sonar
@@ -35,7 +34,7 @@ spec:
         - image: postgres:latest
           name: sonar-postgres
           envFrom:
-            - secretRef:
+            - configMapRef:
                 name: postgres-secret
           ports:
             - containerPort: 5432
