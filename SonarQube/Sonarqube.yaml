@@ -174,7 +174,7 @@ spec:
         - fs.file-max=65536
         imagePullPolicy: IfNotPresent
         securityContext:
-        privileged: true
+            privileged: true
       containers:
       - image: sonarqube:community
         args:
