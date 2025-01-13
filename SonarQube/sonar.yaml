@@ -141,12 +141,12 @@ spec:
           args:
             - -Dsonar.web.context=/sonar
           env:
-            - name: SONARQUBE_JDBC_PASSWORD
+            - name: SONAR_JDBC_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: postgres-pwd
                   key: password #kubectl create secret generic postgres-pwd --from-literal=password=sonar
-            - name: SONARQUBE_JDBC_URL
+            - name: SONAR_JDBC_URL
               value: jdbc:postgresql://sonar-postgres.devops-tools.svc.cluster.local:5432/sonar
           ports:
             - containerPort: 9000
