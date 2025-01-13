@@ -1,20 +1,8 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: postgres-config
-  namespace: devops-tools
-  labels:
-    app: sonar-postgres
-data:
-  POSTGRES_USERNAME: "sonar_user"
-  POSTGRES_DATABASE: "sonar_db"
-  POSTGRES_PASSWORD: "S0N4RQUB3"
----
 # StatefulSet Postgres Database
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: sonar-postgres-dep
+  name: sonar-postgres
   namespace: devops-tools
   labels:
     app: sonar-postgres
@@ -25,21 +13,21 @@ spec:
       app: sonar-postgres
   template:
     metadata:
-      name: sonar-postgres-dep
+      name: sonar-postgres
       labels:
         app: sonar-postgres
     spec:
-      securityContext:
-        fsGroup: 2000 
       containers:
         - image: postgres:latest
           name: sonar-postgres
           env:
-            - name: ALLOW_EMPTY_PASSWORD
-              value: "yes"
-          envFrom:
-            - configMapRef:
-                name: postgres-config
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-pwd
+                  key: password
+            - name: POSTGRES_USER
+              value: sonar
           ports:
             - containerPort: 5432
               name: postgresport
@@ -129,22 +117,6 @@ spec:
     requests:
       storage: 10Gi
 
-#SonarQube ConfigMap
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: sonar-config
-  namespace: devops-tools
-  labels:
-    app: sonarqube
-data:
-  #SONARQUBE_JDBC_URL: "jdbc:postgresql://sonar-postgres.devops-tools.svc.cluster.local:5432/sonar_db"
-  SONARQUBE_JDBC_URL: "jdbc:postgresql://sonar-postgres:5432/sonar_db"
-  SONARQUBE_JDBC_USERNAME: "sonar_user"
-  SONARQUBE_JDBC_PASSWORD: "S0N4RQUB3"
-  JAVA_OPTS: "-Duser.timezone=Asia/Kolkata -Xmx2048m"
-
 #SonarQube Deployment and Service
 ---
 apiVersion: apps/v1
@@ -165,16 +137,17 @@ spec:
     spec:
       containers:
         - image: sonarqube:community
-          args:
-            - -Dsonar.web.context=/sonar
           name: sonarqube
-          envFrom:
-            - configMapRef:
-                name: sonar-config
+          env:
+            - name: SONARQUBE_JDBC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-pwd
+                  key: password
+            - name: SONARQUBE_JDBC_URL
+              value: jdbc:postgresql://sonar-postgres:5432/sonar
           ports:
             - containerPort: 9000
-          securityContext:
-            privileged: true
           volumeMounts:
             - name: data-disk
               mountPath: /opt/sonarqube
