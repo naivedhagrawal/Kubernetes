@@ -165,13 +165,13 @@ spec:
         app: sonarqube
     spec:
       initContainers:
-     # - name: sonarqube
-      - image: busybox
+      - name: init-sysctl
+        image: busybox
         command:
         - sysctl
         - -w
         - vm.max_map_count=262144
-       # - fs.file-max=65536
+        - fs.file-max=65536
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
