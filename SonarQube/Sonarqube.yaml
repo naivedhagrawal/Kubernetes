@@ -168,13 +168,13 @@ spec:
       - name: init
         image: busybox
         command:
-        - sysctl
+        - sysctls
         - -w
         - vm.max_map_count=262144
         - fs.file-max=65536
         imagePullPolicy: IfNotPresent
-        securityContext:
-          privileged: true
+      securityContext:
+        privileged: true
       containers:
         - image: sonarqube:community
           args:
