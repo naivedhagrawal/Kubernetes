@@ -166,7 +166,8 @@ spec:
         app: sonarqube
     spec:
       initContainers:
-      - image: busybox
+      - name: init
+        image: busybox
         command:
         - sysctl
         - -w
