@@ -175,11 +175,11 @@ spec:
         - fs.file-max=131072
         imagePullPolicy: IfNotPresent
         securityContext:
-            privileged: true
-            allowPrivilegeEscalation: true
-            runAsNonRoot: true
-            fsGroup: 1000
-            runAsUser: 1000
+          privileged: true
+          allowPrivilegeEscalation: true
+          runAsNonRoot: true
+          fsGroup: 1000
+          runAsUser: 1000
       containers:
       - image: sonarqube:community
         args:
