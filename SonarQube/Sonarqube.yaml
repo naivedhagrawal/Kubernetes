@@ -165,9 +165,21 @@ spec:
         app: sonarqube
     spec:
       securityContext:
-        fsGroup: 1001
-        runAsUser: 1001
-        runAsGroup: 1001
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsGroup: 1000
+      initContainers:
+      - name: init
+        image: busybox
+        command:
+        - sysctl
+        - -w
+        - vm.max_map_count=262144
+        - fs.file-max=65536
+        imagePullPolicy: IfNotPresent
+        securityContext:
+            privileged: true
+            allowPrivilegeEscalation: true
       containers:
       - image: sonarqube:community
         args:
