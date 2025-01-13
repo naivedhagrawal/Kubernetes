@@ -175,12 +175,6 @@ spec:
         - -w
         - vm.max_map_count=524288
         - fs.file-max=131072
-        - ulimit
-        - -n
-        - 131072
-        - ulimit
-        - -u
-        - 8192
         imagePullPolicy: IfNotPresent
         securityContext:
             privileged: true
