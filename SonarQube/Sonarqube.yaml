@@ -194,7 +194,7 @@ spec:
     spec:
       initContainers:
       - name: init-sysctl
-        image: busybox:1.32
+        image: busybox
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
