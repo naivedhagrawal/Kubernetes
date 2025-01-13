@@ -176,7 +176,7 @@ spec:
         securityContext:
           privileged: true
       containers:
-        - image: sonarqube:latest
+        - image: sonarqube:community
           args:
             - -Dsonar.web.context=/sonar
           name: sonarqube
