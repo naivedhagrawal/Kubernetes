@@ -145,7 +145,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: postgres-pwd
-                  key: password
+                  key: password #kubectl create secret generic postgres-pwd --from-literal=password=sonar
             - name: SONARQUBE_JDBC_URL
               value: jdbc:postgresql://sonar-postgres:5432/sonar
           ports:
