@@ -138,6 +138,8 @@ spec:
       containers:
         - image: sonarqube:community
           name: sonarqube
+          args:
+            - -Dsonar.web.context=/sonar
           env:
             - name: SONARQUBE_JDBC_PASSWORD
               valueFrom:
