@@ -163,16 +163,16 @@ spec:
       labels:
         app: sonarqube
     spec:
-#      initContainers:
- #     - name: init
-  #      image: busybox
-   #     command:
-    #    - sysctl
-     #   - -w
-      #  - vm.max_map_count=262144
-       # imagePullPolicy: IfNotPresent
-        #securityContext:
-         # privileged: true
+      initContainers:
+      - name: init
+        image: busybox
+        command:
+        - sysctl
+        - -w
+        - vm.max_map_count=262144
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: true
       containers:
         - image: sonarqube:community
           args:
