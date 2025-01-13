@@ -6,9 +6,9 @@ metadata:
   labels:
     app: sonar-postgres
 data:
-  POSTGRES_DB: sonar
-  POSTGRES_USER: sonar
-  POSTGRES_PASSWORD: sonar
+  POSTGRES_DB: "sonar"
+  POSTGRES_USER: "sonar"
+  POSTGRES_PASSWORD: "sonar"
 ---
 # StatefulSet Postgres Database
 apiVersion: apps/v1
@@ -125,6 +125,21 @@ spec:
     requests:
       storage: 10Gi
 
+#SonarQube ConfigMap      
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sonar-config
+  namespace: devops-tools
+  labels:
+    app: sonarqube
+data:
+  SONARQUBE_JDBC_URL: "jdbc:postgresql://sonar-postgres.devops-tools.svc.cluster.local:5432/sonar"
+  SONARQUBE_JDBC_USERNAME: "sonar"
+  SONARQUBE_JDBC_PASSWORD: "sonar"
+  JAVA_OPTS: "-Duser.timezone=Asia/Jakarta -Xmx2048m"
+
 #SonarQube Deployment and Service
 ---
 apiVersion: apps/v1
@@ -150,14 +165,9 @@ spec:
           name: sonarqube
           args:
             - -Dsonar.web.context=/sonar
-          env:
-            - name: SONAR_JDBC_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-pwd
-                  key: password #kubectl create secret generic postgres-pwd --from-literal=password=sonar
-            - name: SONAR_JDBC_URL
-              value: jdbc:postgresql://sonar-postgres.devops-tools.svc.cluster.local:5432/sonar
+          envFrom:
+          - configMapRef:
+              name: sonar-config
           ports:
             - containerPort: 9000
           #volumeMounts:
