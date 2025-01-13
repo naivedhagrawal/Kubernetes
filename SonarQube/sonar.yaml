@@ -147,7 +147,7 @@ spec:
                   name: postgres-pwd
                   key: password #kubectl create secret generic postgres-pwd --from-literal=password=sonar
             - name: SONAR_JDBC_URL
-              value: jdbc:postgresql://sonar-postgres.devops-tools.svc.cluster.local:5432/sonar
+              value: jdbc:postgresql://sonar-postgres:5432/sonar
           ports:
             - containerPort: 9000
           #volumeMounts:
