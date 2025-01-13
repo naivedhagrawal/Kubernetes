@@ -115,7 +115,6 @@ spec:
           operator: In
           values:
           - kind-worker
-
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -129,6 +128,8 @@ spec:
   resources:
     requests:
       storage: 10Gi
+
+#SonarQube ConfigMap
 ---
 apiVersion: v1
 kind: ConfigMap
