@@ -154,8 +154,6 @@ metadata:
   namespace: devops-tools
 spec:
   replicas: 1
-  strategy:
-    type: Recreate
   selector:
     matchLabels:
       app: sonarqube
@@ -168,13 +166,13 @@ spec:
       containers:
       - image: sonarqube:community
         args:
-        - -Dsonar.web.context=/sonar
+          - -Dsonar.web.context=/sonar
         name: sonarqube
         envFrom:
-        - configMapRef:
-            name: sonar-config
+          - configMapRef:
+              name: sonar-config
         ports:
-        - containerPort: 9000
+          - containerPort: 9000
         securityContext:
             privileged: true
         volumeMounts:
@@ -187,10 +185,10 @@ spec:
           command: ['sysctl', '-w', 'vm.max_map_count=262144']
           securityContext:
             privileged: true
-      volumes:
-        - name: data-disk
-          persistentVolumeClaim:
-            claimName: sonar-pvc
+    volumes:
+      - name: data-disk
+        persistentVolumeClaim:
+          claimName: sonar-pvc
 
 #Service for SonarQube
 ---
